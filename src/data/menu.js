@@ -112,11 +112,6 @@ export default
                 name:'Regular',
                 info:50,
             },
-            {
-                index:1,
-                name:'Zague',
-                info:100,
-            }
         ],
         unitPrice: 18,
         zaguePrice: null
@@ -132,11 +127,6 @@ export default
                 name:'Regular',
                 info:50,
             },
-            {
-                index:1,
-                name:'Zague',
-                info:100,
-            }
         ],
         unitPrice: 80,
         zaguePrice: null

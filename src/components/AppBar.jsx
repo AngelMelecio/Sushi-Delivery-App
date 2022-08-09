@@ -1,17 +1,19 @@
 import React from 'react'
-import { Image} from 'react-native'
-import {createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import {icons,COLORS} from '../../constants'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import { icons, COLORS } from '../../constants'
 import { useCasaMaki } from '../context/CasaMakiContext'
 import DishListPage from '../pages/DishListPage'
+import OrderPage from '../pages/OrderPage'
 import ShoppingCartPage from '../pages/ShoppingCartPage'
 import ProfilePage from '../pages/ProfilePage'
+import { TouchableOpacity, View, Image } from 'react-native'
 
 const Tab = createBottomTabNavigator()
 
-const AppBar = () => {
+const AppBar = ({navigation}) => {
 
-    const {getCartSize} = useCasaMaki()
+
+    const { getCartSize, textStyles } = useCasaMaki()
     const cartSize = getCartSize()
 
     const options = {
@@ -19,79 +21,76 @@ const AppBar = () => {
         tabBarInactiveBackgroundColor: COLORS.black,
         headerStyle: {
             backgroundColor: COLORS.black,
-            shadowColor:'transparent',
-            
+            shadowColor: 'transparent',
+
         },
         headerTitleStyle: {
-            fontWeight: 'bold',
+            ...textStyles.h2
         },
         headerTintColor: COLORS.primary,
         headerTitleAlign: 'center',
     }
 
-    return(
+    return (
         <Tab.Navigator
-            navigationOptions ={{
+            navigationOptions={{
                 showIcon: true,
             }}
             screenOptions={{
                 tabBarShowLabel: false,
                 tabBarStyle: {
-                    backgroundColor: COLORS.black,
-                    borderTopWidth:0
-                }
+                    borderTopWidth: 0,
+                    display: 'flex'
+                },
+                tabBarHideOnKeyboard: true,
+              
             }}
+            /*tabBarOptions={{
+                keyboardHidesTabBar: true
+             }} */
         >
             <Tab.Screen
                 name="Pide Tus Makis"
                 component={DishListPage}
                 options={{
-                    tabBarIcon: ({focused}) => (
+                    tabBarIcon: ({ focused }) => (
                         <Image
                             source={icons.maki}
                             resizeMode='contain'
                             style={{
                                 width: 40,
                                 height: 40,
-                                tintColor: focused ? COLORS.primary : COLORS.lightGray3
+                                tintColor: focused ? COLORS.primary : COLORS.lightGray4
                             }}
                         />
                     ),
-                    ...options
-                }}
-            />
-            <Tab.Screen
-                name="Favoritos"
-                component={DishListPage}
-                options={{
-                    tabBarIcon: ({focused}) => (
-                        <Image
-                            source={icons.love}
-                            resizeMode='contain'
+                    headerRight: () => (
+                        <View
                             style={{
-                                width: 30,
-                                height: 30,
-                                tintColor: focused ? COLORS.primary : COLORS.lightGray3
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                height: 50,
+                                width: 65,
                             }}
-                        />
-                    ),
-                    ...options
-                }}
-            />
-            <Tab.Screen
-                name="Perfil"
-                component={ProfilePage}
-                options={{
-                    tabBarIcon: ({focused}) => (
-                        <Image
-                            source={icons.usuario}
-                            resizeMode='contain'
-                            style={{
-                                width: 30,
-                                height: 30,
-                                tintColor: focused ? COLORS.primary : COLORS.lightGray3
-                            }}
-                        />
+                        >
+                            <TouchableOpacity
+                                onPress={() => navigation.navigate('Perfil')}
+                                style={{
+                                    height: 40,
+                                    width: 40,
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                }}
+                            >
+                                <Image style={{
+                                    height: 30,
+                                    width: 30,
+                                    tintColor:COLORS.lightGray4,
+                                }}
+                                    source={icons.usuario}
+                                    resizeMode='cover' />
+                            </TouchableOpacity>
+                        </View>
                     ),
                     ...options
                 }}
@@ -100,19 +99,37 @@ const AppBar = () => {
                 name="Carrito"
                 component={ShoppingCartPage}
                 options={{
-                    tabBarIcon: ({focused}) => (
+                    tabBarIcon: ({ focused }) => (
                         <Image
                             source={icons.shoppingCart}
                             resizeMode='contain'
                             style={{
                                 width: 30,
                                 height: 30,
-                                tintColor: focused ? COLORS.primary : COLORS.lightGray3
+                                tintColor: focused ? COLORS.primary : COLORS.lightGray4
                             }}
                         />
                     ),
                     tabBarBadge: cartSize > 0 ? cartSize : null,
-                    tabBarBadgeStyle:{ backgroundColor:COLORS.primary },
+                    tabBarBadgeStyle: { backgroundColor: COLORS.primary },
+                    ...options
+                }}
+            />
+            <Tab.Screen
+                name="Orden"
+                component={OrderPage}
+                options={{
+                    tabBarIcon: ({ focused }) => (
+                        <Image
+                            source={icons.moto}
+                            resizeMode='contain'
+                            style={{
+                                width: 40,
+                                height: 40,
+                                tintColor: focused ? COLORS.primary : COLORS.lightGray4
+                            }}
+                        />
+                    ),
                     ...options
                 }}
             />

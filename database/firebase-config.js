@@ -1,11 +1,35 @@
 import { initializeApp } from 'firebase/app'
-import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
+import {
+  getFirestore,
+  doc,
+  setDoc,
+  getDoc,
+  getDocs,
+  addDoc,
+  collection,
+  onSnapshot,
+  query,
+  where,
+  orderBy,
+  limit,
+  Timestamp,
+  arrayUnion,
+  updateDoc,
+  deleteDoc,
+} from "firebase/firestore";
+
 import {
   getAuth,
   onAuthStateChanged,
-  signInWithEmailAndPassword
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  updateEmail,
+  updateProfile,
+  EmailAuthProvider,
+  reauthenticateWithCredential,
 } from "firebase/auth";
 import 'firebase/firestore'
+import { set } from 'react-native-reanimated';
 
 const firebaseConfig = {
   apiKey: "AIzaSyAR0RqLqjMI06no426X74LlKVEH6e83EN8",
@@ -20,19 +44,35 @@ const app = initializeApp(firebaseConfig)
 
 export const auth = getAuth(app)
 export const DB = getFirestore(app);
-export { 
-  doc, 
-  setDoc, 
-  getDoc, 
+export {
+  getFirestore,
+  doc,
+  setDoc,
+  getDoc,
+  getDocs,
+  addDoc,
+  collection,
+  onSnapshot,
+  query,
+  where,
+  orderBy,
+  limit,
+  getAuth,
   onAuthStateChanged,
-  signInWithEmailAndPassword, 
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  updateEmail,
+  updateProfile,
+  EmailAuthProvider,
+  reauthenticateWithCredential,
+  Timestamp,
+  arrayUnion,
+  updateDoc,
+  deleteDoc
 }
 
-export async function getProfile(email) {
-  const docRef = doc(DB, "userProfile", email);
-  const docSnap = await getDoc(docRef);
-  if (docSnap.exists()) {
-    return docSnap.data()
-  }
-  return null
-}
+
+export const Ref = collection(DB, 'Chat')
+export const q = query(Ref, orderBy('createdAt'), limit(20) )
+
+

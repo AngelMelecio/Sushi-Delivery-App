@@ -11,24 +11,31 @@ import { useCasaMaki } from '../context/CasaMakiContext'
 import empanizados from '../data/empanizados.js'
 
 import DishInfo from '../components/DishInfo'
-import DishSizes from '../components/DishSizes'
-import EmpanizadoOptions from '../components/EmpanizadoOptions'
 import CustomSelector from '../components/CustomSelector'
+import CustomButton from '../components/CustomButton'
 
 const DishPage = ({ route, navigation }) => {
 
-    const { addCartitem } = useCasaMaki()
+
+    const { addCartitem, textStyles, activeOrder } = useCasaMaki()
 
     const [DishObj, setDishObj] = useState(null)
-    
+
     const [quantity, setQuantity] = useState(1)
     const [size, setSize] = useState(0)
     const [empanizado, setEmpanizado] = useState(null)
     const [total, setTotal] = useState(0)
 
 
-    function handleAddToCart() {
-        //addCartitem(dishInfo)
+    const handleAddToCart = () => {
+        addCartitem({
+            name: DishObj.name,
+            quantity: quantity,
+            size: DishObj.sizes[size].name,
+            empanizado: empanizado !== null ? empanizados[empanizado].name : null,
+            total: total,
+        })
+        
         navigation.navigate('Carrito')
     }
 
@@ -38,15 +45,18 @@ const DishPage = ({ route, navigation }) => {
         setTotal( item.sizes[0].info )
     }, [])
 
-    useEffect(()=>{
-        let sum = quantity * DishObj?.sizes[size]?.info
-        + (empanizado !== null ? (9 * quantity) : 0)
-        setTotal(sum.toFixed(2))
-    },[quantity,size,empanizado])
+    useEffect(() => {
+        DishObj && (
+            setTotal(
+                (quantity * DishObj.sizes[size].info
+                    + (empanizado !== null ? (9 * quantity) : 0))
+            )
+        )
+    }, [quantity, size, empanizado])
 
 
     const RenderHeader = () => {
-        
+
         return (
             <View
                 style={{
@@ -54,7 +64,6 @@ const DishPage = ({ route, navigation }) => {
                     padding: SIZES.padding,
                     backgroundColor: 'transparent',
                     justifyContent: 'center',
-                    //marginTop: StatusBar.currentHeight
                 }}
             >
                 <TouchableOpacity
@@ -78,39 +87,9 @@ const DishPage = ({ route, navigation }) => {
                         }}
                     />
                 </TouchableOpacity>
-                {/*<Text style={{ ...FONTS.h2, color: COLORS.primary }}>Precio: ${getSum()}</Text>*/}
             </View>
         )
     }
-    const OrderButton = () => {
-        return (
-            <TouchableOpacity
-                onPress={() => handleAddToCart()}
-                style={{
-                    position: 'absolute',
-                    width: '80%',
-                    bottom: 20,
-                    left: SIZES.width * 0.1,
-                    padding: 10,
-                    borderRadius: SIZES.radius,
-                    backgroundColor: COLORS.primary,
-                    justifyContent: 'center',
-                }}
-            >
-                <Text
-                    style={{
-                        textAlign: 'center',
-                        color: COLORS.black,
-                        ...FONTS.h2,
-                    }}
-                >
-                    Añadir Al Carrito
-                </Text>
-            </TouchableOpacity>
-        )
-    }
-
-
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.black }}>
             <DishInfo
@@ -121,23 +100,28 @@ const DishPage = ({ route, navigation }) => {
             <RenderHeader />
             <ScrollView>
 
-                <Text style={styles.subTitle}>Tamaño</Text>
+                <Text style={[ textStyles.h3, styles.subTitle]}>Tamaño</Text>
                 <CustomSelector
                     data={DishObj?.sizes}
                     selected={size}
                     setSelected={setSize}
+    
                 />
-                <Text style={styles.subTitle}>Empanizado</Text>
+                <Text style={[ textStyles.h3, styles.subTitle]}>Empanizado</Text>
                 <CustomSelector
                     data={empanizados}
                     selected={empanizado}
                     setSelected={setEmpanizado}
+                
                 />
-                <Text style={styles.subTitle} >${total}</Text>
+
             </ScrollView>
+            {!activeOrder && <CustomButton
+                action={handleAddToCart}
+                text={'Añadir Al Carrito'}
+                total={total}
+            />}
             
-            <OrderButton 
-            />
         </SafeAreaView>
     )
 }
@@ -151,9 +135,7 @@ const styles = StyleSheet.create({
     },
     subTitle: {
         textAlign: 'center',
-        ...FONTS.h3,
-        marginVertical:5,
-        padding: SIZES.padding,
+        marginVertical:10,
         color: COLORS.white
     }
 })

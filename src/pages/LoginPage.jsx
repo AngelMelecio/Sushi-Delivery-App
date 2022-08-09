@@ -1,31 +1,46 @@
 import React, { useState } from 'react'
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, SafeAreaView } from 'react-native'
-import { icons, COLORS, FONTS, SIZES } from '../../constants'
+import { COLORS } from '../../constants'
 
-import {CustomInput, Loader} from '../components'
+import { CustomInput, Loader } from '../components'
 
-import {LogIn} from '../../database/backend'
+import { LogIn } from '../../database/backend'
 
 import { useCasaMaki } from '../context/CasaMakiContext'
+import CustomModal from '../components/CustomModal'
 
 const LoginPage = ({ navigation }) => {
-    
-    const [email, setEmail] = useState(undefined)
-    const [password, setPassword] = useState(undefined)
 
-    const { isLoading, setIsLoading } = useCasaMaki()
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const { isLoading, setIsLoading, textStyles } = useCasaMaki()
 
+    const [modalVisible, setModalVisible] = useState(false)
+    const [response, setResponse] = useState(null)
 
     const handleLogin = async () => {
         setIsLoading(true)
-        await LogIn( email,password ) 
-        setIsLoading(false)
-        setPassword('')
+        try {
+            await LogIn(email, password)
+        } catch (e) {
+            setModalVisible(true)
+            setResponse(e)
+        } finally {
+            setIsLoading(false)
+            setPassword('')
+        }
     }
 
     return (
         <>
-            { isLoading && <Loader />}
+            <CustomModal
+                visible={modalVisible}
+                setVisible={setModalVisible}
+                title={'ERROR'}
+                message={response}
+
+            />
+            {isLoading && <Loader />}
             <SafeAreaView
                 style={{ flex: 1, backgroundColor: COLORS.black }}
             >
@@ -37,7 +52,7 @@ const LoginPage = ({ navigation }) => {
                         alignItems: 'center',
                     }}
                 >
-                    <Text style={{ color: COLORS.white, ...FONTS.h3 }} >Inicia Sesión</Text>
+                    <Text style={{ ...textStyles.h2,color: COLORS.primary }} >Inicia Sesión</Text>
                 </View>
                 <ScrollView
                     contentContainerStyle={{
@@ -47,10 +62,10 @@ const LoginPage = ({ navigation }) => {
                         alignItems: 'center',
                     }}
                 >
-                    <Text style={styles.label} >Correo Electrónico</Text>
+                    <Text style={[textStyles.body3, styles.label]} >Correo Electrónico</Text>
                     <CustomInput placeholder={'elrubius@gmail.com'} onChange={setEmail} value={email} />
 
-                    <Text style={styles.label} >Contraseña</Text>
+                    <Text style={[textStyles.body3, styles.label]} >Contraseña</Text>
                     <CustomInput isPassword={true} onChange={setPassword} value={password} />
 
                     <TouchableOpacity
@@ -60,7 +75,7 @@ const LoginPage = ({ navigation }) => {
                             ...styles.button
                         }}
                     >
-                        <Text style={{ textAlign: 'center', color: COLORS.black, ...FONTS.h3 }} >Ingresar</Text>
+                        <Text style={{ ...textStyles.h4, textAlign: 'center', color: COLORS.black }} >Ingresar</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity
@@ -71,7 +86,7 @@ const LoginPage = ({ navigation }) => {
                             ...styles.button
                         }}
                     >
-                        <Text style={{ textAlign: 'center', fontSize: 20, color: COLORS.white }} >Crear Una Cuenta</Text>
+                        <Text style={{ ...textStyles.h4, textAlign: 'center', color: COLORS.white }} >Crear Una Cuenta</Text>
                     </TouchableOpacity>
 
                 </ScrollView>
@@ -85,12 +100,12 @@ export default LoginPage
 const styles = StyleSheet.create({
     label: {
         color: COLORS.white,
-        alignSelf: 'flex-start'
-
+        alignSelf: 'flex-start',
+        marginTop: 5,
     },
     button: {
         width: '100%',
-        padding: 10,
+        padding: 8,
         marginVertical: 10,
         borderRadius: 10,
     }

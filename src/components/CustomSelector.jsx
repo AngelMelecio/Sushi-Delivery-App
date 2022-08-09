@@ -1,3 +1,4 @@
+import { connectFirestoreEmulator } from 'firebase/firestore'
 import React, { useState, useEffect, useRef } from 'react'
 import {
     View,
@@ -7,14 +8,19 @@ import {
     FlatList,
 } from 'react-native'
 import { COLORS, FONTS, SIZES } from '../../constants'
+import {useCasaMaki} from '../context/CasaMakiContext'
+
 
 const CustomSelector = ({ data, selected, setSelected }) => {
+    const {textStyles} = useCasaMaki()
 
     if (data?.length === 1) {
         return (
-            <View style={[styles.itemUnique]}>
-                <Text style={[styles.textSelected, styles.textBold]}>{data[0].name}</Text>
-                {data[0].info && <Text style={styles.textSelected} >${data[0].info}</Text>}
+            <View style={{ justifyContent: 'center', flexDirection: 'row' }}>
+                <View style={[styles.itemUnique]}>
+                    <Text style={[ textStyles.body1, styles.textSelected ]}>{data[0].name}</Text>
+                    {data[0].info && <Text style={[textStyles.body2,styles.textSelected]} >${data[0].info}</Text>}
+                </View>
             </View>
         )
     }
@@ -30,12 +36,12 @@ const CustomSelector = ({ data, selected, setSelected }) => {
                         selected === 0 ? styles.itemSelected : styles.itemUnSelected
                     ]}
                 >
-                    <Text style={[selected === 0 ? styles.textSelected : styles.textUnSelected, styles.textBold]}>
+                    <Text style={[textStyles.body1, selected === 0 ? styles.textSelected : styles.textUnSelected]}>
                         {data[0].name}
                     </Text>
                     {
                         data[0].info &&
-                        <Text style={selected === 0 ? styles.textSelected : styles.textUnSelected}>
+                        <Text style={[ textStyles.body2, selected === 0 ? styles.textSelected : styles.textUnSelected,]}>
                             ${data[0].info}
                         </Text>
                     }
@@ -49,12 +55,12 @@ const CustomSelector = ({ data, selected, setSelected }) => {
                         selected === 1 ? styles.itemSelected : styles.itemUnSelected
                     ]}
                 >
-                    <Text style={[selected === 1 ? styles.textSelected : styles.textUnSelected, styles.textBold]}>
+                    <Text style={[textStyles.body1,selected === 1 ? styles.textSelected : styles.textUnSelected]}>
                         {data[1].name}
                     </Text>
                     {
                         data[1].info &&
-                        <Text style={selected === 1 ? styles.textSelected : styles.textUnSelected} >
+                        <Text style={[textStyles.body2,selected === 1 ? styles.textSelected : styles.textUnSelected]} >
                             ${data[1].info}
                         </Text>
                     }
@@ -82,7 +88,7 @@ const CustomSelector = ({ data, selected, setSelected }) => {
                 ]}
             >
                 <Text style={[selected === item.index ? styles.textSelected : styles.textUnSelected,
-                styles.textBold]}>
+                textStyles.body2]}>
                     {item.name}
                 </Text>
                 {item.info && <Text style={styles.textSelected} >{item.info}</Text>}
@@ -109,15 +115,15 @@ const styles = StyleSheet.create({
     itemCenter: {
         justifyContent: 'center',
         alignItems: 'center',
-        paddingVertical: SIZES.padding,
         paddingHorizontal: SIZES.padding * 2,
         marginHorizontal: 5,
+        paddingBottom: 5,
         //width: SIZES.width * 0.25
     },
     itemUnique: {
         justifyContent: 'center',
         alignItems: 'center',
-        padding: SIZES.padding,
+        padding: SIZES.padding/2,
         marginHorizontal: 5,
         width: SIZES.width * 0.25,
         borderRadius: SIZES.radius,
@@ -138,19 +144,13 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.lightGray2,
     },
     width: {
-        width: SIZES.width * 0.30
+        minWidth: SIZES.width*0.30
     },
     textSelected: {
-        ...FONTS.h4,
-        marginVertical: 2.5,
         color: COLORS.black
     },
     textUnSelected: {
-        ...FONTS.h4,
-        marginVertical: 2.5,
         color: COLORS.white
     },
-    textBold: {
-        ...FONTS.bold
-    }
+
 })

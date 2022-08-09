@@ -5,10 +5,13 @@ import {
     Image, TouchableOpacity
 } from 'react-native'
 
-
 import { images, COLORS, FONTS, SIZES } from '../../constants'
+import {useCasaMaki} from '../context/CasaMakiContext'
 
 const DishInfo = ({ quantity, item, setQuantity }) => {
+
+    const {textStyles} = useCasaMaki()
+
     return (
         <View style={{ backgroundColor: COLORS.black }}>
             {/* Image And Quantity */}
@@ -44,7 +47,7 @@ const DishInfo = ({ quantity, item, setQuantity }) => {
                             borderBottomLeftRadius: 25
                         }}
                     >
-                        <Text style={{ ...FONTS.body1, color: COLORS.white }}>-</Text>
+                        <Text style={{ ...textStyles.h1,  color: COLORS.white }}>-</Text>
                     </TouchableOpacity>
                     <View
                         style={{
@@ -54,7 +57,7 @@ const DishInfo = ({ quantity, item, setQuantity }) => {
                             justifyContent: 'center',
                         }}
                     >
-                        <Text style={{ ...FONTS.h2, color: COLORS.white }}>{quantity}</Text>
+                        <Text style={{ ...textStyles.h2, color: COLORS.white }}>{quantity}</Text>
                     </View>
                     <TouchableOpacity
                         onPress={() => setQuantity((curr) => curr + 1)}
@@ -67,7 +70,7 @@ const DishInfo = ({ quantity, item, setQuantity }) => {
                             borderBottomRightRadius: 25
                         }}
                     >
-                        <Text style={{ ...FONTS.body1, color: COLORS.white }}>+</Text>
+                        <Text style={{...textStyles.h1, color: COLORS.white }}>+</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -76,27 +79,18 @@ const DishInfo = ({ quantity, item, setQuantity }) => {
                 style={{
                     width: '100%',
                     alignItems: 'center',
-                    marginTop: 20,
                     padding: SIZES.padding,
-                    marginVertical: SIZES.margin,
+                    marginTop: SIZES.padding*2,
                     //backgroundColor: COLORS.red
                 }}
             >
                 <Text
-                    style={{
-                        ...FONTS.h2,
-                        marginVertical: 5,
-                        color: COLORS.white,
-                    }}
+                    style={{ ...textStyles.h1, marginVertical: 5,color: COLORS.white,}}
                 >
                     {item?.name}
                 </Text>
                 <Text
-                    style={{
-                        ...FONTS.body3,
-                        marginVertical: 5,
-                        color: COLORS.white,
-                    }}
+                    style={{...textStyles.body1, marginVertical: 5,color: COLORS.white,}}
                 >
                     {item?.ingredients}
                 </Text>

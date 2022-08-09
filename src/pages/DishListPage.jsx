@@ -10,8 +10,11 @@ import {
 } from "react-native";
 import menu from "../data/menu";
 import { images, icons, COLORS, FONTS, SIZES } from '../../constants'
+import { useCasaMaki } from '../context/CasaMakiContext'
 
 const DishListPage = ({ navigation }) => {
+
+    const {textStyles} = useCasaMaki()
 
     /* Datos */
     const categories = [
@@ -56,19 +59,16 @@ const DishListPage = ({ navigation }) => {
             return (
                 <TouchableOpacity
                     style={{
-                        padding: SIZES.padding,
+                        paddingVertical: SIZES.padding/2,
+                        paddingHorizontal: SIZES.padding*1.5,
                         backgroundColor:  (selectedCategory?.id == item.id) ? COLORS.primary : COLORS.lightGray2,
                         borderRadius: SIZES.radius,
                         marginRight: SIZES.padding,
-                        ...styles.shadow
                     }}
                     onPress={() => onSelectCategory(item)}
                 >
-                    <Text
-                        style={{
-                            color: (selectedCategory?.id == item.id) ? COLORS.black : COLORS.white,
-                            ...FONTS.body5
-                        }}
+                   <Text
+                        style={{ ...textStyles.body3, color: (selectedCategory?.id === item.id) ? COLORS.black : COLORS.white,}}
                     >
                         {item.name}
                     </Text>
@@ -79,18 +79,16 @@ const DishListPage = ({ navigation }) => {
 
         return (
             <View style={{ paddingHorizontal: SIZES.padding * 2, paddingVertical: 5, backgroundColor:COLORS.black }} >
-                <Text style={{ fontWeight:'bold', ...FONTS.h2, paddingBottom: SIZES.padding, color:COLORS.white }}>Categorias</Text>
+                
                 <FlatList
                     data={categories}
                     horizontal
                     showsHorizontalScrollIndicator={false}
                     keyExtractor={item => `${item.id}`}
                     renderItem={renderItem}
-                    contentContainerStyle={{ backgroundColor: COLORS.black }}
+                    contentContainerStyle={{ marginTop:5,backgroundColor: COLORS.black }}
                 />
             </View>
-
-
         )
     }
 
@@ -114,8 +112,8 @@ const DishListPage = ({ navigation }) => {
                         }}
                     />
 
-                    <View style={{...styles.itemCenter, paddingVertical: 15}}>
-                        <Text style={{ ...FONTS.h4, color:COLORS.white }} >
+                    <View style={{...styles.itemCenter, padding: 5}}>
+                        <Text style={{ ...textStyles.h3, color:COLORS.white, paddingHorizontal:4,paddingTop:7 }} >
                             {item.name}
                         </Text>
                     </View>
@@ -144,6 +142,7 @@ const DishListPage = ({ navigation }) => {
                 backgroundColor: COLORS.black
             }}
         >
+            <Text style={[textStyles.h3, {color:COLORS.white, marginLeft:SIZES.padding*2} ]}>Categorias</Text>
             <RenderCategories />
             <RenderMenuList />
         </View>
@@ -159,17 +158,12 @@ const styles = StyleSheet.create({
     item: {
         flex: 1,
         margin: 5,
-        //padding: 5,
-        //width: '50%',
-        //height: SIZES.width * 0.84,
         borderRadius: SIZES.radius/2,
         backgroundColor: COLORS.lightGray2
     },
     itemInvisible: {
         flex: 1,
         margin: 5,
-        //padding: 5,
-        //height: SIZES.width * 0.80,
         backgroundColor: 'transparent'
     },
     itemCenter: {

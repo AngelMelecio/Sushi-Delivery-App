@@ -13,7 +13,6 @@ const CustomInput =
     value=null,
     onChange,
 }) => {
-
     const [ passwordHide, setPasswordHide ] = useState(true)
     const [valid,setValid] = useState(true)
 
