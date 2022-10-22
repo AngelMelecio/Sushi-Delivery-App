@@ -1,8 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react'
 import { auth, onAuthStateChanged } from '../../database/firebase-config'
-import { getProfile } from '../../database/backend'
+import { getProfile, getActive } from '../../database/backend'
 import {Fonts} from '../../constants/Fonts'
-import {getActive} from '../../database/backend'
 
 const CasaMakiContext = createContext({})
 

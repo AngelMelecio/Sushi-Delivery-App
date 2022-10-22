@@ -16,7 +16,7 @@ const AdminHomePage = ({ navigation }) => {
         { id: 3, name: 'Recoger', plural: 'Recoger' },
         { id: 4, name: 'Entragado', plural: 'Entregadas' }
     ]
-    const { orders, changeStatus, currentStatus, getChat, deleteOrder } = useAdmin()
+    const { orders, changeStatus, getChat, deleteOrder } = useAdmin()
 
     const { textStyles } = useCasaMaki()
     const [showLogout, setShowLogout] = useState(false)
@@ -59,12 +59,12 @@ const AdminHomePage = ({ navigation }) => {
         }))
     }
     function unselectAll() {
-        setSelected((prev) => prev.map((order, index) => {
+        setSelected((prev) => prev.map((order ) => {
             return { ...order, selection: false }
         }))
     }
-    async function handleDelete(selected) {
-        selected.map((order)=>{
+    async function handleDelete(ord) {
+        ord.map((order)=>{
             if( order.selection )
                 deleteOrder( order.id )
         })
@@ -82,7 +82,8 @@ const AdminHomePage = ({ navigation }) => {
         return (
             <>
                 <View style={styles.header}>
-                    {showLogout && <TouchableOpacity
+                    {showLogout && 
+                    <TouchableOpacity
                         onPress={handleLogout}
                         style={styles.logout}>
                         <Text style={{ ...textStyles.h4, color: COLORS.white }}>Salir</Text>

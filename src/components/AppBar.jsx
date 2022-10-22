@@ -42,7 +42,7 @@ const AppBar = ({navigation}) => {
                     borderTopWidth: 0,
                     display: 'flex'
                 },
-                tabBarHideOnKeyboard: true,
+                tabBarHideOnKeyboard: true
               
             }}
             /*tabBarOptions={{

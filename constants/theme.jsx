@@ -54,7 +54,7 @@ export const FONTS = {
     h4: { fontSize: SIZES.h4, lineHeight: 22 },
     body1: { fontSize: SIZES.body1, lineHeight: 36 },
     body2: { fontSize: SIZES.body2, lineHeight: 30 },
-    dody3: { fontSize: SIZES.dody3, lineHeight: 22 },
+    dody3: { fontSize: SIZES.body3, lineHeight: 22 },
     body4: { fontSize: SIZES.body4, lineHeight: 20,  },
     body5: { fontSize: SIZES.body5, lineHeight: 22,  },
 }

@@ -129,8 +129,7 @@ export async function updateUser(name='', email='', phone='', address='') {
 export function chatQuery(id) {
     const docRef = doc(DB, 'userProfile', id)
     const colRef = collection(docRef, 'OrderChat')
-    const q = query(colRef, orderBy('createdAt'), limit(20))
-    return q
+    return query(colRef, orderBy('createdAt'), limit(20))
 }
 
 export function ordersQuery(){
@@ -151,8 +150,7 @@ export async function writeChat(sender, id, message) {
 }
 
 export function chatsCollection(){
-    const colRef = collection(DB, 'Chats')
-    return colRef
+    return collection(DB, 'Chats')
 }
 
 export async function setNotification(id, boolean){
@@ -209,7 +207,7 @@ export async function createDefaultChat(email){
     })
 }
 
-export async function deleteDocument(collection,email){
-    const docRef = doc(DB,collection,email)
+export async function deleteDocument(collectionName,email){
+    const docRef = doc(DB,collectionName,email)
     await deleteDoc(docRef) 
 }
